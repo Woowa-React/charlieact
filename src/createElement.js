@@ -24,14 +24,8 @@ function createTextElement(text) {
   };
 }
 
-// const test = createElement("div", { className: "box", id: 1 }, [
-//   createElement("h1", "", createTextElement("제목")),
-//   createElement("p", "", createTextElement("내용")),
-// ]);
-// console.dir(test, { depth: null });
-
 // ---------------------------------------------------------
-// 테스트 실행 함수
+// 1일차 테스트
 // ---------------------------------------------------------
 function assert(description, condition) {
   if (condition) {
