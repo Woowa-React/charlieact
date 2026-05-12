@@ -1,8 +1,6 @@
 function createNode({ type, props }) {
   const { children = [], ...attributes } = props;
 
-  console.log(`${type} DOM 생성`);
-
   //텍스트면 텍스트 노드 반환
   if (type === "TEXT") {
     return document.createTextNode(attributes.nodeValue);
@@ -25,7 +23,18 @@ function createNode({ type, props }) {
   return domNode;
 }
 
-function render(reactElement, root) {
+function render(newVnode, container) {
+  const oldVnode = container._prevNode;
+
+  if (!oldVnode) {
+    mount(newVnode, container);
+  } else {
+    console.log(`비교를 시작합니다. ${oldVnode} vs ${newVnode}`);
+  }
+  container._prevNode = newVnode;
+}
+
+function mount(reactElement, root) {
   root.appendChild(createNode(reactElement));
 }
 
@@ -39,7 +48,7 @@ const myApp = createElement(
     "ul",
     null,
     createElement("li", null, "Virtual DOM 설계"),
-    createElement("li", null, "Recursive Rendering 구현"),
+    createElement("li", null, "Recursive mounting 구현"),
   ),
 );
 
@@ -48,4 +57,16 @@ const rootElement = document.getElementById("root");
 render(myApp, rootElement);
 
 // 3. 성공 확인 콘솔
-console.log("렌더링이 완료되었습니다!");
+
+console.log("첫 번째 렌더링 완료", rootElement._prevNode);
+
+setTimeout(() => {
+  const myApp2 = createElement(
+    "div",
+    { className: "box" },
+    createElement("h1", { id: "title" }, "반가워!"),
+    createElement("p", null, "두 번째 렌더링입니다."),
+  );
+  render(myApp2, rootElement);
+  console.log("두 번째 렌더링 완료", rootElement._prevNode);
+}, 2000);
